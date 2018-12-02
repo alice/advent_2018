@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 
-pub fn run1() {
-  let rows = super::input::read_lines("input/day1.txt".to_string());
+pub fn run1(filename: &String) {
+  let rows = super::input::read_lines(filename.to_string());
 
   let mut frequency = 0;
   for row in rows {
@@ -16,8 +16,8 @@ pub fn run1() {
   println!("frequency: {}", frequency);
 }
 
-pub fn run2() {
-  let rows = super::input::read_lines("input/day1.txt".to_string());
+pub fn run2(filename: &String) {
+  let rows = super::input::read_lines(filename.to_string());
 
   let mut frequency = 0;
   let mut seen = HashSet::<i32>::new();
