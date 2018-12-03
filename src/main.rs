@@ -4,6 +4,7 @@ use std::env;
 
 mod day1;
 mod day2;
+mod day3;
 mod input;
 
 fn main() {
@@ -19,6 +20,7 @@ fn main() {
         "1.2" => day1::run2(filename),
         "2.1" => day2::run1(filename),
         "2.2" => day2::run2(filename),
+        "3.1" => day3::run1(filename),
         _ => {}
     }
 }
