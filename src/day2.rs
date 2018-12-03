@@ -1,5 +1,3 @@
-use std::iter::FromIterator;
-
 pub fn run1(filename: &String) {
   let rows = super::input::read_lines(filename.to_string());
 
@@ -36,24 +34,23 @@ pub fn run1(filename: &String) {
 pub fn run2(filename: &String) {
   let rows = super::input::read_lines(filename.to_string());
   for i in 0..rows.len() {
-    let this_row: Vec<char> = rows[i].chars().collect();
+    let this_row = &rows[i];
     for j in (i + 1)..rows.len() {
-      let that_row: Vec<char> = rows[j].chars().collect();
-      let mut diff = 0;
-      let mut common = Vec::new();
-      // assuming same length rows
-      for k in 0..this_row.len() {
-        if this_row[k] != that_row[k] {
-          diff = diff + 1;
-          if diff > 1 {
+      let that_row = &rows[j];
+      let mut anomaly = None;
+      for (k, (this, that)) in (1..).zip(this_row.chars().zip(that_row.chars())) {
+        if this != that {
+          if !anomaly.is_none() {
+            anomaly = None;
             break;
           }
-        } else {
-          common.push(this_row[k]);
+          anomaly = Some(k);
         }
       }
-      if diff == 1 {
-        let result = String::from_iter(common.iter());
+      if !anomaly.is_none() {
+        let mut result = String::new();
+        result.push_str(&this_row[0..anomaly.unwrap()]);
+        result.push_str(&this_row[anomaly.unwrap() + 1..]);
         println!(
           "Found near match: {} and {}. Common: {}",
           rows[i], rows[j], result
