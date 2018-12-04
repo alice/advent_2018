@@ -33,7 +33,9 @@ impl FromStr for Claim {
   type Err = ParseError;
 
   fn from_str(s: &str) -> Result<Self, Self::Err> {
-    let claim_re: Regex = Regex::new(r"#(\d+) @ (\d+),(\d+): (\d+)x(\d+)").unwrap();
+    lazy_static! {
+      static ref claim_re: Regex = Regex::new(r"#(\d+) @ (\d+),(\d+): (\d+)x(\d+)").unwrap();
+    };
     let captures = claim_re.captures(s).unwrap();
 
     let id: i32 = captures[1].parse().unwrap();

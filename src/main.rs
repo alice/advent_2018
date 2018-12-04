@@ -1,10 +1,16 @@
 #![allow(dead_code)]
 
+#[macro_use]
+extern crate lazy_static;
+extern crate chrono;
+extern crate regex;
+
 use std::env;
 
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 mod grid;
 mod input;
 
@@ -22,6 +28,7 @@ fn main() {
         "2.1" => day2::run1(filename),
         "2.2" => day2::run2(filename),
         "3.1" => day3::run1(filename),
+        "4.1" => day4::run1(filename),
         _ => {}
     }
 }
