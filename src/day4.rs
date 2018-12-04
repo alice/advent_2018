@@ -109,7 +109,7 @@ impl PartialOrd for Guard {
     return Some(self.cmp(other));
   }
 }
-pub fn run1(filename: &String) {
+pub fn run(filename: &String) {
   let mut lines = super::input::read_lines(filename.to_string());
   lines.sort_unstable();
   let mut guards = HashMap::<i32, Guard>::new();
@@ -151,10 +151,32 @@ pub fn run1(filename: &String) {
     }
   }
   println!(
-    "guard {} slept for {} minutes, most frequently at 00:{:02}. answer key: {}",
+    "laziest guard {} slept for {} minutes, most frequently at 00:{:02}. answer key: {}",
     laziest_guard.id,
     laziest_guard.total_sleep_minutes,
     most_frequent_minute,
     laziest_guard.id * most_frequent_minute as i32
+  );
+
+  let mut most_frequent_minute = 0;
+  let mut highest_frequency = 0;
+  let mut most_consistent_guard = 0;
+  for guard in lazy_guards {
+    for i in 0..60 {
+      let current_frequency = guard.sleep_frequencies[i];
+      if current_frequency > highest_frequency {
+        most_frequent_minute = i;
+        highest_frequency = current_frequency;
+        most_consistent_guard = guard.id;
+      }
+    }
+  }
+
+  println!(
+    "guard {} is most consistent, sleeping at 00:{:02} {} times. answer key: {}",
+    most_consistent_guard,
+    most_frequent_minute,
+    highest_frequency,
+    most_consistent_guard * most_frequent_minute as i32
   );
 }
