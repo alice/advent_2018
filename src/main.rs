@@ -5,6 +5,7 @@ use std::env;
 mod day1;
 mod day2;
 mod day3;
+mod grid;
 mod input;
 
 fn main() {
