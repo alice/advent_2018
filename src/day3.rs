@@ -5,8 +5,10 @@ use self::math::round;
 use self::regex::Regex;
 use std::collections::HashMap;
 use std::collections::HashSet;
+use std::str::FromStr;
+use std::string::ParseError;
 
-#[derive(Debug, PartialEq, Eq, Hash, Copy, Clone)]
+#[derive(PartialEq, Eq, Hash, Copy, Clone)]
 struct Coords {
   x: usize,
   y: usize,
@@ -15,6 +17,37 @@ struct Coords {
 struct Inch {
   id: i32,
   multiple: bool,
+}
+
+struct Claim {
+  id: i32,
+  left: usize,
+  top: usize,
+  width: usize,
+  height: usize,
+}
+
+impl FromStr for Claim {
+  type Err = ParseError;
+
+  fn from_str(s: &str) -> Result<Self, Self::Err> {
+    let claim_re: Regex = Regex::new(r"#(\d+) @ (\d+),(\d+): (\d+)x(\d+)").unwrap();
+    let captures = claim_re.captures(s).unwrap();
+
+    let id: i32 = captures[1].parse().unwrap();
+    let left: usize = captures[2].parse().unwrap();
+    let top: usize = captures[3].parse().unwrap();
+    let width: usize = captures[4].parse().unwrap();
+    let height: usize = captures[5].parse().unwrap();
+
+    return Ok(Claim {
+      id,
+      left,
+      top,
+      width,
+      height,
+    });
+  }
 }
 
 fn print_grid(grid: &HashMap<Coords, Inch>, width: usize, height: usize, max: i32) {
@@ -56,20 +89,15 @@ pub fn run1(filename: &String) {
   let mut max: i32 = 0;
 
   let lines = super::input::read_lines(filename.to_string());
-  let line_re = Regex::new(r"#(\d+) @ (\d+),(\d+): (\d+)x(\d+)").unwrap();
+
   for line in lines {
-    let captures = line_re.captures(&line).unwrap();
-    let id: i32 = captures[1].parse().unwrap();
-    non_overlapped.insert(id);
-    max = std::cmp::max(max, id);
-    let left: usize = captures[2].parse().unwrap();
-    let top: usize = captures[3].parse().unwrap();
-    let width: usize = captures[4].parse().unwrap();
-    let height: usize = captures[5].parse().unwrap();
-    grid_width = std::cmp::max(grid_width, left + width);
-    grid_height = std::cmp::max(grid_height, top + height);
-    for x in left..left + width {
-      for y in top..top + height {
+    let claim: Claim = line.parse().unwrap();
+    non_overlapped.insert(claim.id);
+    max = std::cmp::max(max, claim.id);
+    grid_width = std::cmp::max(grid_width, claim.left + claim.width);
+    grid_height = std::cmp::max(grid_height, claim.top + claim.height);
+    for x in claim.left..claim.left + claim.width {
+      for y in claim.top..claim.top + claim.height {
         let mut coords = Coords { x, y };
         if grid.contains_key(&coords) {
           let mut inch = grid.get_mut(&coords).unwrap();
@@ -78,12 +106,12 @@ pub fn run1(filename: &String) {
             overlapping += 1;
           }
           non_overlapped.remove(&inch.id);
-          non_overlapped.remove(&id);
+          non_overlapped.remove(&claim.id);
         } else {
           grid.insert(
             coords,
             Inch {
-              id,
+              id: claim.id,
               multiple: false,
             },
           );
