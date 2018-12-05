@@ -31,7 +31,8 @@ fn main() {
         "3.1" => day3::run1(filename),
         "4.1" => day4::run(filename),
         "4.2" => day4::run(filename),
-        "5.1" => day5::run(filename),
+        "5.1" => day5::run1(filename),
+        "5.2" => day5::run2(filename),
         _ => {}
     }
 }
