@@ -1,7 +1,5 @@
-extern crate regex;
-
-use self::regex::Regex;
 use grid::Grid;
+use regex::Regex;
 use std::collections::HashSet;
 use std::fmt;
 use std::str::FromStr;

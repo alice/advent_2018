@@ -1,11 +1,12 @@
+use std::collections::hash_map::{Iter, IterMut};
 use std::collections::HashMap;
 use std::default::Default;
 use std::fmt;
 
-#[derive(PartialEq, Eq, Hash, Copy, Clone)]
-struct Coords {
-  x: usize,
-  y: usize,
+#[derive(Debug, PartialEq, Eq, Hash, Copy, Clone)]
+pub struct Coords {
+  pub x: usize,
+  pub y: usize,
 }
 
 pub struct Grid<T: fmt::Display> {
@@ -43,6 +44,22 @@ impl<T: fmt::Display> Grid<T> {
   pub fn has_cell_at(&self, x: usize, y: usize) -> bool {
     let coords = Coords { x, y };
     return self.grid.contains_key(&coords);
+  }
+
+  pub fn iter(&self) -> Iter<Coords, T> {
+    return self.grid.iter();
+  }
+
+  pub fn iter_mut(&mut self) -> IterMut<Coords, T> {
+    return self.grid.iter_mut();
+  }
+
+  pub fn width(&self) -> usize {
+    return self.width;
+  }
+
+  pub fn height(&self) -> usize {
+    return self.height;
   }
 
   pub fn print(&self) {
