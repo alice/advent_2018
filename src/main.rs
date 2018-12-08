@@ -3,6 +3,7 @@
 #[macro_use]
 extern crate lazy_static;
 extern crate chrono;
+extern crate multimap;
 extern crate regex;
 
 use std::env;
@@ -38,6 +39,7 @@ fn main() {
         "6.1" => day6::run1(filename),
         "6.2" => day6::run2(filename),
         "7.1" => day7::run1(filename),
+        "7.2" => day7::run2(filename),
         _ => {}
     }
 }
