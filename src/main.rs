@@ -13,6 +13,7 @@ mod day3;
 mod day4;
 mod day5;
 mod day6;
+mod day7;
 mod grid;
 mod input;
 
@@ -36,6 +37,7 @@ fn main() {
         "5.2" => day5::run2(filename),
         "6.1" => day6::run1(filename),
         "6.2" => day6::run2(filename),
+        "7.1" => day7::run1(filename),
         _ => {}
     }
 }
