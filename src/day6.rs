@@ -34,12 +34,10 @@ impl FromStr for Location {
     let mut id = String::new();
 
     let idx = id_num % ALPHABET.len();
-    println!("idx: {}, letter: {}", idx, &ALPHABET[idx..=idx]);
     id.push_str(&ALPHABET[idx..=idx]);
     id_num = id_num / ALPHABET.len();
     while id_num > 0 {
       let idx = id_num % ALPHABET.len();
-      println!("idx: {}, letter: {}", idx, &ALPHABET[idx..=idx]);
       id.push_str(&ALPHABET[idx..=idx]);
       id_num = id_num / ALPHABET.len();
     }
@@ -174,4 +172,30 @@ pub fn run1(filename: &String) {
     "{:} has the most closest to it ({})",
     most, most.num_closest
   );
+}
+
+pub fn run2(filename: &String) {
+  let lines = super::input::read_lines(filename.to_string());
+  let mut grid = Grid::<Location>::new();
+  for line in lines {
+    let location: Location = line.parse().unwrap();
+    grid.insert(location.x, location.y, location);
+  }
+
+  let mut region_size = 0;
+  for row in 0..grid.height() {
+    for col in 0..grid.width() {
+      let mut total_distance = 0;
+      for (coords, _) in grid.iter() {
+        let x = coords.x as i32;
+        let y = coords.y as i32;
+        let distance = ((x - col as i32).abs() + (y - row as i32).abs()) as usize;
+        total_distance += distance;
+      }
+      if total_distance < 10000 {
+        region_size += 1;
+      }
+    }
+  }
+  println!("region size: {}", region_size);
 }
