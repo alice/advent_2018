@@ -1,7 +1,5 @@
 use regex::Regex;
-use std::cmp::{Eq, Ordering};
 use std::collections::{HashMap, HashSet};
-use std::hash::{Hash, Hasher};
 
 struct Graph {
   nodes: HashMap<String, Node>,
@@ -92,32 +90,6 @@ impl Node {
       follows: HashSet::<String>::new(),
       precedes: HashSet::<String>::new(),
     };
-  }
-}
-
-impl Hash for Node {
-  fn hash<H: Hasher>(&self, state: &mut H) {
-    self.name.hash(state);
-  }
-}
-
-impl Eq for Node {}
-
-impl PartialEq for Node {
-  fn eq(&self, other: &Node) -> bool {
-    return self.name == other.name;
-  }
-}
-
-impl Ord for Node {
-  fn cmp(&self, other: &Node) -> Ordering {
-    return self.name.cmp(&other.name);
-  }
-}
-
-impl PartialOrd for Node {
-  fn partial_cmp(&self, other: &Node) -> Option<Ordering> {
-    return Some(self.cmp(other));
   }
 }
 
