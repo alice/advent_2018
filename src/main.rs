@@ -42,6 +42,7 @@ fn main() {
         "7.1" => day7::run1(filename),
         "7.2" => day7::run2(filename),
         "8.1" => day8::run1(filename),
+        "8.2" => day8::run2(filename),
         _ => {}
     }
 }
