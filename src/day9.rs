@@ -47,61 +47,92 @@ pub fn run1() {
   println!("Max score is {}", max);
 }
 
-fn print_marbles2(player: &str, next: &Vec<usize>, current_marble: usize) {
-  let mut out = String::new();
-  out.push_str(player);
-  let mut marble = 0;
-  let mut first = true;
-  while marble != 0 || first {
-    if !first {
-      out.push_str(" ");
-    } else {
-      first = false;
-    }
+struct Circle {
+  prev: Vec<usize>,
+  next: Vec<usize>,
+  current_marble: usize,
+}
 
-    if marble == current_marble {
-      out.push_str(&format!("({})", marble));
-    } else {
-      out.push_str(&format!("{}", marble));
+impl Circle {
+  fn new(last_marble: usize) -> Circle {
+    Circle {
+      next: (0..last_marble + 1).into_iter().collect(),
+      prev: (0..last_marble + 1).into_iter().collect(),
+      current_marble: 0,
     }
-
-    marble = next[marble];
   }
-  println!("{}", out);
+
+  fn print(&self, player: &str) {
+    let mut out = String::new();
+    out.push_str(player);
+    let mut marble = 0;
+    let mut first = true;
+    while marble != 0 || first {
+      if !first {
+        out.push_str(" ");
+      } else {
+        first = false;
+      }
+
+      if marble == self.current_marble {
+        out.push_str(&format!("({})", marble));
+      } else {
+        out.push_str(&format!("{}", marble));
+      }
+
+      marble = self.next[marble];
+    }
+    println!("{}", out);
+  }
+
+  fn insert_after_current(&mut self, next_marble: usize) {
+    let next_next = self.next[self.current_marble];
+    self.next[self.current_marble] = next_marble;
+    self.next[next_marble] = next_next;
+    self.prev[next_next] = next_marble;
+    self.prev[next_marble] = self.current_marble;
+    self.current_marble = next_marble;
+  }
+
+  fn advance(&mut self) {
+    self.current_marble = self.next[self.current_marble];
+  }
+
+  fn back(&mut self) {
+    self.current_marble = self.prev[self.current_marble];
+  }
+
+  fn remove_current(&mut self) -> usize {
+    let temp_prev = self.prev[self.current_marble];
+    let temp_next = self.next[self.current_marble];
+    self.prev[temp_next] = temp_prev;
+    self.next[temp_prev] = temp_next;
+    let removed = self.current_marble;
+    self.current_marble = temp_next;
+    return removed;
+  }
 }
 
 pub fn run2() {
-  let mut next: Vec<usize> = (0..LAST_MARBLE + 1).into_iter().collect();
-  let mut prev: Vec<usize> = (0..LAST_MARBLE + 1).into_iter().collect();
-
+  let mut circle = Circle::new(LAST_MARBLE);
   let mut players: [usize; NUM_PLAYERS] = [0; NUM_PLAYERS];
   let mut current_player = 1;
   let mut next_marble = 1;
-  let mut current_marble = 0;
 
   while next_marble <= LAST_MARBLE {
     if next_marble % 23 == 0 {
       players[current_player] += next_marble;
       for _ in 0..7 {
-        current_marble = prev[current_marble];
+        circle.back();
       }
-      players[current_player] += current_marble;
-      let anticlockwise = prev[current_marble];
-      let clockwise = next[current_marble];
-      prev[clockwise] = anticlockwise;
-      next[anticlockwise] = clockwise;
-      current_marble = clockwise;
+      players[current_player] += circle.remove_current();
     } else {
-      current_marble = next[current_marble];
-      let clockwise = next[current_marble];
-      next[current_marble] = next_marble;
-      next[next_marble] = clockwise;
-      prev[clockwise] = next_marble;
-      prev[next_marble] = current_marble;
-      current_marble = next_marble;
+      circle.advance();
+      circle.insert_after_current(next_marble);
     }
     next_marble += 1;
     current_player = (current_player + 1) % NUM_PLAYERS;
+    //circle.print(format!("[{}]  ", current_player).as_str());
   }
 
   let max = players.into_iter().max().unwrap();
