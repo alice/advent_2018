@@ -9,6 +9,7 @@ extern crate regex;
 use std::env;
 
 mod day1;
+mod day10;
 mod day2;
 mod day3;
 mod day4;
@@ -19,6 +20,7 @@ mod day8;
 mod day9;
 mod grid;
 mod input;
+mod multi_grid;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -46,6 +48,8 @@ fn main() {
         "8.2" => day8::run2(filename),
         "9.1" => day9::run1(),
         "9.2" => day9::run2(),
+        "10.1" => day10::run(filename),
+        "10.2" => day10::run(filename),
         _ => {}
     }
 }
