@@ -11,6 +11,7 @@ use std::env;
 mod day1;
 mod day10;
 mod day11;
+mod day12;
 mod day2;
 mod day3;
 mod day4;
@@ -53,6 +54,7 @@ fn main() {
         "10.2" => day10::run(filename),
         "11.1" => day11::run1(),
         "11.2" => day11::run2(),
+        "12.1" => day12::run1(filename),
         _ => {}
     }
 }
