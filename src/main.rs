@@ -59,6 +59,7 @@ fn main() {
         "12.1" => day12::run1(filename),
         "12.2" => day12::run2(filename),
         "13.1" => day13::run1(filename),
+        "13.2" => day13::run2(filename),
         _ => {}
     }
 }

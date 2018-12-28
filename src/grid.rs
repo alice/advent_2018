@@ -9,14 +9,14 @@ pub struct Coords {
   pub y: usize,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Eq, Hash, PartialEq, Copy, Clone)]
 pub enum Turn {
   Left,
   Right,
   Straight,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Eq, Hash, PartialEq, Copy, Clone)]
 pub enum Direction {
   Up,
   Right,
@@ -47,6 +47,7 @@ impl Direction {
   }
 }
 
+#[derive(Clone)]
 pub struct Grid<T: fmt::Display> {
   grid: HashMap<Coords, T>,
   width: usize,
