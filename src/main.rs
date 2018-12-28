@@ -3,6 +3,7 @@
 #[macro_use]
 extern crate lazy_static;
 extern crate chrono;
+extern crate cpuprofiler;
 extern crate multimap;
 extern crate regex;
 
@@ -55,6 +56,7 @@ fn main() {
         "11.1" => day11::run1(),
         "11.2" => day11::run2(),
         "12.1" => day12::run1(filename),
+        "12.2" => day12::run2(filename),
         _ => {}
     }
 }
