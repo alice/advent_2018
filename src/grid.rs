@@ -9,6 +9,44 @@ pub struct Coords {
   pub y: usize,
 }
 
+#[derive(Copy, Clone)]
+pub enum Turn {
+  Left,
+  Right,
+  Straight,
+}
+
+#[derive(Copy, Clone)]
+pub enum Direction {
+  Up,
+  Right,
+  Down,
+  Left,
+}
+
+impl From<i32> for Direction {
+  fn from(n: i32) -> Self {
+    use self::Direction::*;
+    match n {
+      0 => Up,
+      1 => Right,
+      2 => Down,
+      3 => Left,
+      _ => panic!("Can't convert {} to Direction", n),
+    }
+  }
+}
+
+impl Direction {
+  pub fn turn(&self, turn: Turn) -> Direction {
+    match turn {
+      Turn::Left => Direction::from((*self as i32 + 4 - 1) % 4),
+      Turn::Right => Direction::from((*self as i32 + 1) % 4),
+      Turn::Straight => *self,
+    }
+  }
+}
+
 pub struct Grid<T: fmt::Display> {
   grid: HashMap<Coords, T>,
   width: usize,
@@ -24,9 +62,13 @@ impl<T: fmt::Display> Grid<T> {
     }
   }
 
+  pub fn insert_at(&mut self, coords: Coords, cell: T) {
+    self.insert(coords.x, coords.y, cell);
+  }
+
   pub fn insert(&mut self, x: usize, y: usize, cell: T) {
     self.width = std::cmp::max(self.width, x + 1);
-    self.height = std::cmp::max(self.width, y + 1);
+    self.height = std::cmp::max(self.height, y + 1);
     let coords = Coords { x, y };
     self.grid.insert(coords, cell);
   }
@@ -36,9 +78,37 @@ impl<T: fmt::Display> Grid<T> {
     return self.grid.get(&coords);
   }
 
+  pub fn get_at_mut(&mut self, coords: Coords) -> Option<&mut T> {
+    return self.grid.get_mut(&coords);
+  }
+
   pub fn get_mut(&mut self, x: usize, y: usize) -> Option<&mut T> {
     let coords = Coords { x, y };
     return self.grid.get_mut(&coords);
+  }
+
+  pub fn get_offset(&self, coords: Coords, d: usize, direction: Direction) -> Coords {
+    use self::Direction::*;
+    let mut coords = coords.clone();
+    match direction {
+      Up => {
+        if coords.y >= d {
+          coords.y -= d
+        } else {
+          panic!("trying to subtract {} from {}", d, coords.y);
+        }
+      }
+      Down => coords.y += d,
+      Left => {
+        if coords.x >= d {
+          coords.x -= d
+        } else {
+          panic!("trying to subtract {} from {}", d, coords.x);
+        }
+      }
+      Right => coords.x += d,
+    }
+    return coords;
   }
 
   pub fn has_cell_at(&self, x: usize, y: usize) -> bool {

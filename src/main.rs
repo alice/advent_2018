@@ -13,6 +13,7 @@ mod day1;
 mod day10;
 mod day11;
 mod day12;
+mod day13;
 mod day2;
 mod day3;
 mod day4;
@@ -57,6 +58,7 @@ fn main() {
         "11.2" => day11::run2(),
         "12.1" => day12::run1(filename),
         "12.2" => day12::run2(filename),
+        "13.1" => day13::run1(filename),
         _ => {}
     }
 }
