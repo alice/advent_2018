@@ -14,6 +14,7 @@ mod day10;
 mod day11;
 mod day12;
 mod day13;
+mod day14;
 mod day2;
 mod day3;
 mod day4;
@@ -28,12 +29,11 @@ mod multi_grid;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    if args.len() != 3 {
-        println!("Usage: {:?} puzzle filename", std::env::current_exe());
-        return;
-    }
     let puzzle = &args[1];
-    let filename = &args[2];
+    let mut filename = &"".to_string();
+    if args.len() > 2 {
+        filename = &args[2];
+    }
     match puzzle.as_ref() {
         "1.1" => day1::run1(filename),
         "1.2" => day1::run2(filename),
@@ -60,6 +60,8 @@ fn main() {
         "12.2" => day12::run2(filename),
         "13.1" => day13::run1(filename),
         "13.2" => day13::run2(filename),
+        "14.1" => day14::run1(),
+        "14.2" => day14::run2(),
         _ => {}
     }
 }
